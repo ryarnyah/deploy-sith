@@ -1,5 +1,5 @@
 -- prod.dhall
--- config for staging env
+-- config for production env
 
 -- schemas
 let ConfigDeploy = ../types/sith-config-deploy.dhall

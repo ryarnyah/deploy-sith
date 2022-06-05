@@ -1,7 +1,7 @@
 -- config for env
 
+-- sith-config.dhall
 
--- schemas
 let ConfigDeploy = ./sith-config-deploy.dhall
 
 let ConfigSvc = ./sith-config-svc.dhall

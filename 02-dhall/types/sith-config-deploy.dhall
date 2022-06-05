@@ -14,11 +14,13 @@
       requests: {cpu: Text, memory: Text},
       limits: {cpu: Text, memory: Text},
     },
-    livenessProbe: {path: Text, port: < Int: Integer | String: Text >}
+    livenessProbe: {path: Text, port: < Int: Integer | String: Text >},
+    secretName: Optional Text
   },
   default =
   {
     portName = None Text,
     environnement = None Text,
+    secretName = None Text
   }
 }

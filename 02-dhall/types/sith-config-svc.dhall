@@ -1,4 +1,4 @@
---- ConfigSvc
+--- sith-config-svc.dhall
 {
   Type =
   { 

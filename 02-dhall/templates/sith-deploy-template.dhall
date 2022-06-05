@@ -1,11 +1,12 @@
-let kubernetes =
-     https://raw.githubusercontent.com/dhall-lang/dhall-kubernetes/v6.0.0/1.21/package.dhall
+-- sith-deploy-template.dhall
+
+let kubernetes = https://raw.githubusercontent.com/dhall-lang/dhall-kubernetes/v6.0.0/1.21/package.dhall sha256:9d07ad4eff6d388aaf7c4715d3b83812a7eee8a6281a5e64098aaddb3551ce6a
+
+let null = https://prelude.dhall-lang.org/v21.1.0/Optional/null.dhall sha256:3871180b87ecaba8b53fffb2a8b52d3fce98098fab09a6f759358b9e8042eedc
 
 let ConfigDeploy = ../types/sith-config-deploy.dhall
 
-let null = https://prelude.dhall-lang.org/v19.0.0/Optional/null.dhall
 
--- TODO env var
 let deployment =
   λ(config : ConfigDeploy.Type) → 
   kubernetes.Deployment::{
@@ -39,10 +40,17 @@ let deployment =
             , livenessProbe = Some kubernetes.Probe::{ 
               httpGet = Some kubernetes.HTTPGetAction::{ path = Some config.livenessProbe.path, port = config.livenessProbe.port  } 
             }
+            , volumeMounts = if null Text (config.secretName)
+              then None (List kubernetes.VolumeMount.Type)
+              else Some [ kubernetes.VolumeMount::{mountPath = "/etc/sith", name = "secret-volume", readOnly = Some True } ]
             }
           ]
+        , volumes = if null Text (config.secretName)
+          then None (List kubernetes.Volume.Type)
+          else Some [ kubernetes.Volume::{ name = "secret-volume", secret = Some kubernetes.SecretVolumeSource::{ secretName = config.secretName } } ]
         }
       }
+      
     }
   }
 
